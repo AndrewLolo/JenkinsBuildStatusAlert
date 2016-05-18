@@ -1,0 +1,15 @@
+{
+  "name": "jenkins-build-status-alert",
+  "version": "1.0.0",
+  "description": "Send signal to raspberry according to last build status on jenkins",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Andrii_Lolo@epam.com Viktor_Novak@epam.com",
+  "license": "ISC",
+  "dependencies": {
+    "jenkins-api": "^0.2.8",
+    "johnny-five": "^0.9.49"
+  }
+}
