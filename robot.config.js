@@ -19,11 +19,12 @@ module.exports = {
         }
     },
 
-    toggle: function(my) {
-        return getBuildResult() ? my.succesfulBuildLed.toggle : my.succesfulBuildLed.toggle;
-    },
-
     work: function (my) {
-        every((1).second(), my.toggle(my));
+        every((1).second(), toggle.bind(my));
     }
 };
+
+
+function toggle() {
+    return getBuildResult() ? this.succesfulBuildLed.toggle() : this.failedBuildLed.toggle()
+}
