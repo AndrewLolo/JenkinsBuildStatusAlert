@@ -1,6 +1,5 @@
-'use strict';
+const robot = require('./robot');
+const polling = require('./polling');
 
-const Cylon = require('cylon');
-const robotConfig = require('./robot.config');
-
-Cylon.robot(robotConfig).start();
+polling.start();
+robot.start();

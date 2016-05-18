@@ -1,6 +1,6 @@
 'use strict';
 
-const getBuildResult = require('./polling');
+const buildInfoStorage = require('../buildInfoStorage');
 
 module.exports = {
     connections: {
@@ -17,14 +17,5 @@ module.exports = {
             driver: 'led',
             pin: 16
         }
-    },
-
-    work: function (my) {
-        every((1).second(), toggle.bind(my));
     }
 };
-
-
-function toggle() {
-    return getBuildResult() ? this.succesfulBuildLed.toggle() : this.failedBuildLed.toggle()
-}
