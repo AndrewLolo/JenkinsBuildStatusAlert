@@ -3,8 +3,6 @@ const jenkinsapi = require('jenkins-api');
 
 const jenkins = jenkinsapi.init('http://jenkins.marks.kyiv.epam.com/');
 
-
-
 jenkins.last_build_info('01.0_POS_DEV1_buildShared', function(err, data) {
     if (err){ return console.log(err); }
     console.log(data)
