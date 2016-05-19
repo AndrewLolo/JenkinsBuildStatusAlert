@@ -4,11 +4,25 @@
     <meta charset="UTF-8">
     <title>Title</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/1.4.6/socket.io.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <script>
-        var socket = io();
-    </script>
-    test
+
+    <div class="container">
+        <h1>Input job:</h1>
+        <div class="form-group">
+            <input type="text" class="form-control" id="job">
+        </div>
+        <button type="button" class="btn btn-success btn-block" onclick="updateJob()">Update job</button>
+        <h2>Predefined jobs</h2>
+        <ul class="list-group" onclick="updateJobFromPredefined()">
+            <li><a class="list-group-item" data-job="01.2_POS_DEV1_buildUI">01.2_POS_DEV1_buildUI</a></li>
+            <li><a class="list-group-item" data-job="01.4_POS_DEV1_buildBackofficeUI">01.4_POS_DEV1_buildBackofficeUI</a></li>
+            <li><a class="list-group-item" data-job="01.1_POS_DEV1_buildBackend">01.1_POS_DEV1_buildBackend</a></li>
+        </ul>
+    </div>
+
+    <script type="text/javascript" src="app.js"></script>
 </body>
 </html>
