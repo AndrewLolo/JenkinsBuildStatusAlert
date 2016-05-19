@@ -19,9 +19,15 @@ class PollingEngine {
 
     poll() {
         if (!locker.isLocked()) {
+            console.log('2', this.job);
             locker.lock();
             jenkins.job_info(this.job, this.fetchBuildStatus.bind(this));
         }
+    }
+
+    updateJob(job) {
+        console.log('123', job);
+        this.job = job;
     }
 
     fetchBuildStatus(err, result) {
