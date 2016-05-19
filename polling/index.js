@@ -2,14 +2,15 @@
 
 const jenkinsapi = require('jenkins-api');
 const locker = require('./pollLocker');
-const config = require('./polling.config.js');
-const buildInfoStorage = require('../buildInfoStorage');
+const config = require('./polling.config');
 
 const jenkins = jenkinsapi.init(config.url);
 
 class PollingEngine {
-    constructor(config) {
+    constructor(buildStorage) {
         Object.assign(this, config);
+        this.buildStorage = buildStorage;
+        locker.unlock();
     }
 
     start() {
@@ -17,20 +18,25 @@ class PollingEngine {
     }
 
     poll() {
-        if (locker.isLocked()) {
+        if (!locker.isLocked()) {
             locker.lock();
-            jenkins.last_success(this.job, this.fetchBuildStatus);
+            jenkins.job_info(this.job, this.fetchBuildStatus.bind(this));
         }
     }
 
     fetchBuildStatus(err, result) {
         if (err) {
-            throw new Error(err);
+            buildInfoStorage.setFailStatus();
+            locker.unlock();
         }
-        result ? buildInfoStorage.setSuccessStatus() : buildInfoStorage.setFailStatus();
-        locker.unlock();
+        else {
+            result = result.lastSuccessfulBuild.number > result.lastFailedBuild.number;
+            result ? this.buildStorage.setSuccessStatus() : this.buildStorage.setFailStatus();
+            locker.unlock();
+        }
     }
 }
 
-module.exports = new PollingEngine();
+
+module.exports = PollingEngine;
 

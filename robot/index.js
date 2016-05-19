@@ -1,10 +1,18 @@
 'use strict';
 
 const Cylon = require('cylon');
-const robotActions = require('./robot.config.js');
-const robotConfig = require('./robot.config.js');
+const RobotSetup = require('./robot.setupData');
+const robotConfig = require('./robot.config');
+
+class Robot {
+    constructor(buildStorage) {
+        this.setupData = new RobotSetup(buildStorage, robotConfig);
+    }
+
+    start() {
+        Cylon.robot(this.setupData).start();
+    }
+}
 
 
-const robotSetupData = Object.assign({}, robotConfig, robotActions);
-
-module.exports = Cylon.robot(robotSetupData);
+module.exports = Robot;

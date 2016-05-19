@@ -1,3 +1,5 @@
+'use strict';
+
 const STATUS = require('./constants');
 
 class BuildInfoStorage {
@@ -13,9 +15,9 @@ class BuildInfoStorage {
         this.status = STATUS.FAIL;
     }
 
-    getBuildStatus() {
-        return this.status;
+    isStatusSuccess() {
+        return this.status === STATUS.SUCCESS;
     }
 }
 
-module.exports = new BuildInfoStorage();
+module.exports = BuildInfoStorage;

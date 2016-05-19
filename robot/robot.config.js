@@ -1,7 +1,3 @@
-'use strict';
-
-const buildInfoStorage = require('../buildInfoStorage');
-
 module.exports = {
     connections: {
         raspi: {

@@ -1,3 +1,5 @@
+'use strict';
+
 class PollLocker {
     constructor() {
         this.locked = false;
