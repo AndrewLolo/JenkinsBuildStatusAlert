@@ -1,7 +1,7 @@
 'use strict';
 
 const jenkinsapi = require('jenkins-api');
-const locker = require('./pollLocker');
+const Locker = require('./pollLocker');
 const config = require('./polling.config');
 
 const jenkins = jenkinsapi.init(config.url);
@@ -10,7 +10,7 @@ class PollingEngine {
     constructor(buildStorage) {
         Object.assign(this, config);
         this.buildStorage = buildStorage;
-        locker.unlock();
+        this.locker = new Locker();
     }
 
     start() {
@@ -18,9 +18,9 @@ class PollingEngine {
     }
 
     poll() {
-        if (!locker.isLocked()) {
+        if (!this.locker.isLocked()) {
             console.log('2', this.job);
-            locker.lock();
+            this.locker.lock();
             jenkins.job_info(this.job, this.fetchBuildStatus.bind(this));
         }
     }
@@ -32,13 +32,16 @@ class PollingEngine {
 
     fetchBuildStatus(err, result) {
         if (err) {
-            buildInfoStorage.setFailStatus();
-            locker.unlock();
+            this.buildStorage.setFailStatus();
+            this.locker.unlock();
         }
         else {
-            result = result.lastSuccessfulBuild.number > result.lastFailedBuild.number;
-            result ? this.buildStorage.setSuccessStatus() : this.buildStorage.setFailStatus();
-            locker.unlock();
+            const buildSuccessful = result.lastSuccessfulBuild.number > (result.lastFailedBuild ? result.lastFailedBuild.number  : 0);
+            const buildProcessing = result.lastBuild.number > result.lastCompletedBuild.number;
+
+            buildSuccessful ? this.buildStorage.setSuccessStatus() : this.buildStorage.setFailStatus();
+            buildProcessing ? this.buildStorage.setProcessingStatus() : this.buildStorage.setCompleteStatus();
+            this.locker.unlock();
         }
     }
 }

@@ -17,13 +17,20 @@ function toggle() {
 
 function toggleSuccessful() {
     this.failedBuildLed.turnOff();
-    this.succesfulBuildLed.toggle();
+    this.buildStorage.isStatusProcessing() ? this.succesfulBuildLed.toggle() : turnOn(this.succesfulBuildLed);
 }
 
 function toggleFailed() {
     this.succesfulBuildLed.turnOff();
-    this.failedBuildLed.toggle();
+    this.buildStorage.isStatusProcessing() ? this.failedBuildLed.toggle() : turnOn(this.failedBuildLed);
 }
+
+function turnOn(led) {
+    if (!led.isOn()) {
+        led.turnOn();
+    }
+}
+
 
 module.exports = RobotSetup;
 

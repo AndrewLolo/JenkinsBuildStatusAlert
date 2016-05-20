@@ -19,4 +19,4 @@ class PollLocker {
 }
 
 
-module.exports = new PollLocker();
+module.exports = PollLocker;

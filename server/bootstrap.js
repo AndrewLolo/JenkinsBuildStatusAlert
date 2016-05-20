@@ -1,18 +1,22 @@
 'use strict';
+
+const BuildStorage = require('./buildInfoStorage');
+const Robot = require('./robot');
+const PollingEngine = require('./polling');
+const socketInit = require('./socket');
+
 class Setup {
     constructor(server) {
-        const BuildStorage = require('./buildInfoStorage');
-        const Robot = require('./robot');
-        const PollingEngine = require('./polling');
+        this.server = server;
+        this.buildStorage = new BuildStorage();
+        this.robot = new Robot(this.buildStorage);
+        this.pollingEngine = new PollingEngine(this.buildStorage);
+    }
 
-
-        const buildStorage = new BuildStorage();
-        const robot = new Robot(buildStorage);
-        const pollingEngine = new PollingEngine(buildStorage);
-
-        pollingEngine.start();
-        robot.start();
-        require('./socket')(server, pollingEngine);
+    start() {
+        this.pollingEngine.start();
+        this.robot.start();
+        socketInit(this.server, this.pollingEngine);
     }
 }
 
